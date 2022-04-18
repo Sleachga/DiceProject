@@ -1,23 +1,40 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import AppLoading from 'expo-app-loading';
+import { useFonts } from 'expo-font';
 
 import CalculatorPage from './calculator/CalculatorPage';
 
 const SettingsScreen = () => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#2a2d35',
+      }}
+    >
+      <Text style={{ color: 'white' }}>Settings!</Text>
     </View>
   );
 };
 
 const RollsScreen = () => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Rolls!</Text>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#2a2d35',
+      }}
+    >
+      <Text style={{ color: 'white' }}>Rolls!</Text>
     </View>
   );
 };
@@ -25,6 +42,14 @@ const RollsScreen = () => {
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    Neucha: require('./assets/fonts/Neucha-Regular.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -42,9 +67,20 @@ export default function App() {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: 'black',
-          tabBarInactiveTintColor: 'gray',
+          tabBarActiveTintColor: '#fff',
+          tabBarActiveBackgroundColor: '#2a2d35',
+          tabBarInactiveTintColor: '#fff',
+          tabBarInactiveBackgroundColor: '#212326',
           tabBarShowLabel: false,
+          tabBarItemStyle: {
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
+          },
+          tabBarStyle: {
+            borderTopWidth: 0,
+            elevation: 0,
+            backgroundColor: '#212326',
+          },
           headerShown: false,
         })}
       >

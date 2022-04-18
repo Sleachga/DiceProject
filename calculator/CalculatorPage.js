@@ -5,13 +5,13 @@ import Calculator from './Calculator';
 
 const Container = styled.View`
   display: flex;
-  background-color: #fff;
+  background-color: red;
   align-items: center;
   justify-content: center;
 `;
 
 const Content = styled.View`
-  background-color: white;
+  background-color: #212326;
   width: 100%;
   height: 100%;
   display: flex;

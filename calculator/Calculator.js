@@ -1,10 +1,14 @@
+import React from 'react';
+
+import { Pressable } from 'react-native';
+
 import styled from 'styled-components/native';
-import { Pressable, Text } from 'react-native';
+import { FontAwesome5, Feather } from '@expo/vector-icons';
 
 const Container = styled.View`
   display: flex;
   padding: 20px;
-  background-color: lightgrey;
+  background-color: #2a2d35;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
   align-items: center;
@@ -25,12 +29,14 @@ const Button = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${({ pressed }) => (pressed ? 'grey' : 'white')};
+  background-color: ${({ pressed }) => (pressed ? 'grey' : '#212326')};
   border-radius: 10px;
 `;
 
 const ButtonText = styled.Text`
   font-size: 30px;
+  font-family: 'Neucha';
+  color: #fff;
 `;
 
 const CalcButton = ({ children }) => {
@@ -70,7 +76,14 @@ const Calculator = () => {
       </Row>
       <Row>
         <CalcButton>D</CalcButton>
-        <CalcButton>Roll</CalcButton>
+        <CalcButton onPress={async () => handleAnimation()}>
+          <FontAwesome5 name='dice-d20' size={24} color='white' />
+          {/* Roll */}
+        </CalcButton>
+        <CalcButton>
+          <Feather name='delete' size={24} color='white' />
+          {/* Delete */}
+        </CalcButton>
       </Row>
     </Container>
   );
