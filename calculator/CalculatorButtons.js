@@ -39,9 +39,9 @@ const ButtonText = styled.Text`
   color: #fff;
 `;
 
-const CalcButton = ({ children }) => {
+const CalcButton = ({ onPress, children }) => {
   return (
-    <Pressable style={{ flexGrow: 1, flex: 1 }} onPress={() => null}>
+    <Pressable style={{ flexGrow: 1, flex: 1 }} onPress={onPress}>
       {({ pressed }) => (
         <Button pressed={pressed}>
           <ButtonText>{children}</ButtonText>
@@ -51,36 +51,46 @@ const CalcButton = ({ children }) => {
   );
 };
 
-const Calculator = () => {
+const Calculator = ({ formula, setFormula }) => {
+  const NumberButton = ({ number }) => {
+    return (
+      <CalcButton onPress={() => setFormula(formula + number)}>
+        {number}
+      </CalcButton>
+    );
+  };
+
   return (
     <Container>
       <Row>
-        <CalcButton>7</CalcButton>
-        <CalcButton>8</CalcButton>
-        <CalcButton>9</CalcButton>
+        <NumberButton number='7' />
+        <NumberButton number='8' />
+        <NumberButton number='9' />
       </Row>
       <Row>
-        <CalcButton>4</CalcButton>
-        <CalcButton>5</CalcButton>
-        <CalcButton>6</CalcButton>
+        <NumberButton number='4' />
+        <NumberButton number='5' />
+        <NumberButton number='6' />
       </Row>
       <Row>
-        <CalcButton>1</CalcButton>
-        <CalcButton>2</CalcButton>
-        <CalcButton>3</CalcButton>
+        <NumberButton number='1' />
+        <NumberButton number='2' />
+        <NumberButton number='3' />
       </Row>
       <Row>
-        <CalcButton> -</CalcButton>
-        <CalcButton>0</CalcButton>
-        <CalcButton>+</CalcButton>
+        <CalcButton onPress={() => setFormula(formula + '-')}> -</CalcButton>
+        <NumberButton number='0' />
+        <CalcButton onPress={() => setFormula(formula + '+')}>+</CalcButton>
       </Row>
       <Row>
-        <CalcButton>D</CalcButton>
+        <CalcButton onPress={() => setFormula(formula + 'D')}>D</CalcButton>
         <CalcButton onPress={async () => handleAnimation()}>
           <FontAwesome5 name='dice-d20' size={24} color='white' />
           {/* Roll */}
         </CalcButton>
-        <CalcButton>
+        <CalcButton
+          onPress={() => setFormula(formula.substring(0, formula.length - 1))}
+        >
           <Feather name='delete' size={24} color='white' />
           {/* Delete */}
         </CalcButton>
