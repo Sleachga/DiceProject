@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
+import Toast from 'react-native-toast-message';
 
 import CalculatorPage from './calculator/CalculatorPage';
 
@@ -51,43 +52,46 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+    <>
+      <Toast />
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
 
-            if (route.name === 'Calculator') {
-              iconName = focused ? 'calculator' : 'calculator-outline';
-            } else if (route.name === 'Rolls') {
-              iconName = focused ? 'md-star' : 'md-star-outline';
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'settings' : 'settings-outline';
-            }
+              if (route.name === 'Calculator') {
+                iconName = focused ? 'calculator' : 'calculator-outline';
+              } else if (route.name === 'Rolls') {
+                iconName = focused ? 'md-star' : 'md-star-outline';
+              } else if (route.name === 'Settings') {
+                iconName = focused ? 'settings' : 'settings-outline';
+              }
 
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: '#fff',
-          tabBarActiveBackgroundColor: '#2a2d35',
-          tabBarInactiveTintColor: '#fff',
-          tabBarInactiveBackgroundColor: '#212326',
-          tabBarShowLabel: false,
-          tabBarItemStyle: {
-            borderBottomLeftRadius: 20,
-            borderBottomRightRadius: 20,
-          },
-          tabBarStyle: {
-            borderTopWidth: 0,
-            elevation: 0,
-            backgroundColor: '#212326',
-          },
-          headerShown: false,
-        })}
-      >
-        <Tab.Screen name='Calculator' component={CalculatorPage} />
-        <Tab.Screen name='Rolls' component={RollsScreen} />
-        <Tab.Screen name='Settings' component={SettingsScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: '#fff',
+            tabBarActiveBackgroundColor: '#2a2d35',
+            tabBarInactiveTintColor: '#fff',
+            tabBarInactiveBackgroundColor: '#212326',
+            tabBarShowLabel: false,
+            tabBarItemStyle: {
+              borderBottomLeftRadius: 20,
+              borderBottomRightRadius: 20,
+            },
+            tabBarStyle: {
+              borderTopWidth: 0,
+              elevation: 0,
+              backgroundColor: '#212326',
+            },
+            headerShown: false,
+          })}
+        >
+          <Tab.Screen name='Calculator' component={CalculatorPage} />
+          <Tab.Screen name='Rolls' component={RollsScreen} />
+          <Tab.Screen name='Settings' component={SettingsScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </>
   );
 }
