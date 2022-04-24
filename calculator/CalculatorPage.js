@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import styled from 'styled-components/native';
 
+import useDiceCalculator from './useDiceCalculator';
+
 import CalculatorOutput from './CalculatorOutput';
 import CalculatorButtons from './CalculatorButtons';
 
@@ -22,13 +24,12 @@ const Content = styled.View`
 `;
 
 const App = () => {
-  const [formula, setFormula] = useState('');
-
+  const [formula, { push, pop, roll, clear }] = useDiceCalculator();
   return (
     <Container>
       <Content>
         <CalculatorOutput formula={formula} />
-        <CalculatorButtons formula={formula} setFormula={setFormula} />
+        <CalculatorButtons push={push} pop={pop} roll={roll} clear={clear} />
       </Content>
       <StatusBar style='auto' />
     </Container>

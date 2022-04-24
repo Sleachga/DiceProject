@@ -3,7 +3,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 
 import styled from 'styled-components/native';
-import { FontAwesome5, Feather } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 
 const Container = styled.View`
   display: flex;
@@ -39,9 +39,14 @@ const ButtonText = styled.Text`
   color: #fff;
 `;
 
-const CalcButton = ({ onPress, children }) => {
+const CalcButton = ({ onPress, onPressIn, onLongPress, children }) => {
   return (
-    <Pressable style={{ flexGrow: 1, flex: 1 }} onPress={onPress}>
+    <Pressable
+      style={{ flexGrow: 1, flex: 1 }}
+      onPress={onPress}
+      onPressIn={onPressIn}
+      onLongPress={onLongPress}
+    >
       {({ pressed }) => (
         <Button pressed={pressed}>
           <ButtonText>{children}</ButtonText>
@@ -51,52 +56,50 @@ const CalcButton = ({ onPress, children }) => {
   );
 };
 
-const Calculator = ({ formula, setFormula }) => {
-  const NumberButton = ({ number }) => {
-    return (
-      <CalcButton onPress={() => setFormula(formula + number)}>
-        {number}
-      </CalcButton>
-    );
-  };
-
+const CalculatorButtons = ({ push, pop, roll, clear }) => {
   return (
     <Container>
       <Row>
-        <NumberButton number='7' />
-        <NumberButton number='8' />
-        <NumberButton number='9' />
+        {[7, 8, 9].map((n) => (
+          <CalcButton key={n} onPressIn={() => push(n)}>
+            {n}
+          </CalcButton>
+        ))}
       </Row>
       <Row>
-        <NumberButton number='4' />
-        <NumberButton number='5' />
-        <NumberButton number='6' />
+        {[4, 5, 6].map((n) => (
+          <CalcButton key={n} onPressIn={() => push(n)}>
+            {n}
+          </CalcButton>
+        ))}
       </Row>
       <Row>
-        <NumberButton number='1' />
-        <NumberButton number='2' />
-        <NumberButton number='3' />
+        {[1, 2, 3].map((n) => (
+          <CalcButton key={n} onPressIn={() => push(n)}>
+            {n}
+          </CalcButton>
+        ))}
       </Row>
       <Row>
-        <CalcButton onPress={() => setFormula(formula + '-')}> -</CalcButton>
-        <NumberButton number='0' />
-        <CalcButton onPress={() => setFormula(formula + '+')}>+</CalcButton>
+        <CalcButton onPressIn={() => push('-')}> -</CalcButton>
+        <CalcButton onPressIn={() => push(0)}>0</CalcButton>
+        <CalcButton onPressIn={() => push('+')}>+</CalcButton>
       </Row>
       <Row>
-        <CalcButton onPress={() => setFormula(formula + 'D')}>D</CalcButton>
-        <CalcButton onPress={async () => handleAnimation()}>
-          <FontAwesome5 name='dice-d20' size={24} color='white' />
-          {/* Roll */}
-        </CalcButton>
+        <CalcButton onPressIn={() => push('D')}>D</CalcButton>
+        <CalcButton onPressIn={roll}>Roll</CalcButton>
         <CalcButton
-          onPress={() => setFormula(formula.substring(0, formula.length - 1))}
+          onPress={pop}
+          onLongPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            clear();
+          }}
         >
-          <Feather name='delete' size={24} color='white' />
-          {/* Delete */}
+          Delete
         </CalcButton>
       </Row>
     </Container>
   );
 };
 
-export default Calculator;
+export default CalculatorButtons;

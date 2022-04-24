@@ -1,3 +1,5 @@
+import React, { useRef } from 'react';
+
 import styled from 'styled-components/native';
 
 const Container = styled.View`
@@ -11,18 +13,23 @@ const Container = styled.View`
 `;
 
 const OutputContainer = styled.View`
-  padding: 5px 5px 5px 20px;
+  height: 70px;
+`;
+
+const ScrollContainer = styled.ScrollView`
+  margin: 0px 0px 0px 30px;
 `;
 
 const Formula = styled.Text`
   font-size: 50px;
   font-family: 'Neucha';
   color: #fff;
+  padding: 0px 30px 0px 0px;
 `;
 
 const styleFormula = (formula) => {
   let output = '';
-  [...formula].forEach((char) => {
+  formula.forEach((char) => {
     if (char === '-' || char === '+') output += ` ${char} `;
     else output += char;
   });
@@ -30,10 +37,20 @@ const styleFormula = (formula) => {
 };
 
 const CalculatorOutput = ({ formula }) => {
+  const scrollViewRef = useRef();
   return (
     <Container>
       <OutputContainer>
-        <Formula>{styleFormula(formula)}</Formula>
+        <ScrollContainer
+          ref={scrollViewRef}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          onContentSizeChange={() =>
+            scrollViewRef.current.scrollToEnd({ animated: true })
+          }
+        >
+          <Formula>{styleFormula(formula)}</Formula>
+        </ScrollContainer>
       </OutputContainer>
     </Container>
   );
