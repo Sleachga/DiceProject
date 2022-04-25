@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -53,7 +53,6 @@ export default function App() {
 
   return (
     <>
-      <Toast />
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={({ route }) => ({
@@ -92,6 +91,7 @@ export default function App() {
           <Tab.Screen name='Settings' component={SettingsScreen} />
         </Tab.Navigator>
       </NavigationContainer>
+      <Toast />
     </>
   );
 }

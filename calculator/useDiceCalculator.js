@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { last, slice } from 'lodash';
 
+import Toast from 'react-native-toast-message';
+
 const useDiceCalculator = () => {
   const [formula, setFormula] = useState([]);
 
@@ -16,7 +18,7 @@ const useDiceCalculator = () => {
     if (isValid(formula)) push(data);
   };
 
-  return [formula, { push: pushIfValid, pop, clear, roll }];
+  return [formula, setFormula, { push: pushIfValid, pop, clear, roll }];
 };
 
 const isValid = (formula) => {
@@ -24,6 +26,12 @@ const isValid = (formula) => {
 };
 
 const roll = (formula) => {
+  Toast.show({
+    autoHide: true,
+    visibilityTime: 3000,
+    type: 'info',
+    text2: 'This is some something',
+  });
   console.log('Rolled!');
 };
 

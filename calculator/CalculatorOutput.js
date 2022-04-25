@@ -8,7 +8,6 @@ const Container = styled.View`
   justify-content: flex-start;
   align-items: stretch;
   width: 100%;
-  height: 50%;
   background-color: #212326;
 `;
 
@@ -24,15 +23,16 @@ const Formula = styled.Text`
   font-size: 50px;
   font-family: 'Neucha';
   color: #fff;
-  padding: 0px 30px 0px 0px;
+  padding: 5px 30px 0px 0px;
 `;
 
-const styleFormula = (formula) => {
+export const styleFormula = (formula) => {
   let output = '';
   formula.forEach((char) => {
     if (char === '-' || char === '+') output += ` ${char} `;
     else output += char;
   });
+
   return output;
 };
 
@@ -46,7 +46,7 @@ const CalculatorOutput = ({ formula }) => {
           horizontal
           showsHorizontalScrollIndicator={false}
           onContentSizeChange={() =>
-            scrollViewRef.current.scrollToEnd({ animated: true })
+            scrollViewRef.current.scrollToEnd({ animated: false })
           }
         >
           <Formula>{styleFormula(formula)}</Formula>
