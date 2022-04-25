@@ -1,6 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
+import toastConfig from './Toast';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -91,7 +93,7 @@ export default function App() {
           <Tab.Screen name='Settings' component={SettingsScreen} />
         </Tab.Navigator>
       </NavigationContainer>
-      <Toast />
+      <Toast config={toastConfig} />
     </>
   );
 }

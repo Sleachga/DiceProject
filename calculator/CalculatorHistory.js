@@ -220,6 +220,7 @@ const Roll = ({ formula, formulaDetails, result, index }) => {
 const CalculatorHistory = ({ setFormula }) => {
   return (
     <>
+      {/* TODO: Need to add scroll to bottom on size change */}
       <Container
         inverted
         data={testData}
