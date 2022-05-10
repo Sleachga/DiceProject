@@ -1,137 +1,14 @@
 import React from 'react';
+import { Pressable } from 'react-native';
 
 import { styleFormula } from './CalculatorOutput';
 
 import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as Haptics from 'expo-haptics';
+import Toast from 'react-native-toast-message';
 
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const testData = [
-  {
-    index: 0,
-    formula: ['2', 'D', '6', '+', '5'],
-    formulaDetails: [
-      { addition: true, results: [2, 4] },
-      { addition: true, number: 5 },
-    ],
-    result: '131',
-  },
-  {
-    index: 1,
-    formula: ['4', 'D', '8', '+', '3', '+', '2', 'D', '4'],
-    formulaDetails: [
-      {
-        addition: true,
-        results: [1, 2, 1, 1], // TODO: Do we even need this other than results?
-      },
-      {
-        addition: true,
-        number: 3,
-      },
-      {
-        addition: true,
-        results: [2, 4],
-      },
-      {
-        addition: true,
-        number: 5,
-      },
-      {
-        addition: true,
-        results: [2, 4],
-      },
-      {
-        addition: true,
-        number: 5,
-      },
-      {
-        addition: true,
-        results: [2, 4],
-      },
-      {
-        addition: true,
-        number: 5,
-      },
-    ],
-    result: '19',
-  },
-  {
-    index: 2,
-    formula: ['3', 'D', '10', '+', '2'],
-    formulaDetails: [
-      {
-        addition: true,
-        results: [6, 4, 8],
-      },
-      {
-        addition: false,
-        number: 2,
-      },
-    ],
-    result: '16',
-  },
-  {
-    index: 3,
-    formula: ['8', 'D', '10', '-', '2'],
-    formulaDetails: [
-      {
-        addition: true,
-        results: [6, 4, 8],
-      },
-      {
-        addition: false,
-        number: 2,
-      },
-    ],
-    result: '16',
-  },
-  {
-    index: 4,
-    formula: ['3', 'D', '4', '-', '2'],
-    formulaDetails: [
-      {
-        addition: true,
-        results: [6, 4, 8],
-      },
-      {
-        addition: false,
-        number: 2,
-      },
-    ],
-    result: '16',
-  },
-  {
-    index: 5,
-    formula: ['6', 'D', '12'],
-    formulaDetails: [
-      {
-        addition: true,
-        results: [6, 4, 8],
-      },
-      {
-        addition: false,
-        number: 2,
-      },
-    ],
-    result: '16',
-  },
-  {
-    index: 6,
-    formula: ['3', 'D', '4', '+', '8'],
-    formulaDetails: [
-      {
-        addition: true,
-        results: [6, 4, 8],
-      },
-      {
-        addition: false,
-        number: 2,
-      },
-    ],
-    result: '16',
-  },
-];
 
 const Container = styled.FlatList`
   width: 100%;
@@ -145,7 +22,10 @@ const RollContainer = styled.View`
   align-items: center;
   padding-left: 30px;
   padding-right: 30px;
-  background-color: ${({ index }) => (index % 2 === 0 ? '#2a2d35' : '#212326')};
+  background-color: ${({ index, pressed }) => {
+    if (pressed) return 'grey';
+    else return index % 2 === 0 ? '#2a2d35' : '#212326';
+  }};
   padding-top: 5px;
   padding-bottom: 5px;
 `;
@@ -164,7 +44,6 @@ const RollResultContainer = styled.View`
 
 const RollResultText = styled.Text`
   color: white;
-  font-family: 'Neucha';
   font-size: 30px;
 `;
 
@@ -176,7 +55,6 @@ const Column = styled.View`
 
 const RollText = styled.Text`
   color: white;
-  font-family: 'Neucha';
   font-size: 20px;
 `;
 
@@ -204,26 +82,41 @@ const displayFormulaDetails = (formulaDetails) => {
 };
 
 const Roll = ({ formula, formulaDetails, result, index }) => {
+  const onLongPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Toast.show({
+      autoHide: true,
+      visibilityTime: 3000,
+      type: 'rollToast',
+      text1: 'Pressed!',
+      text2: 'Test',
+    });
+  };
+
   return (
-    <RollContainer index={index}>
-      <Column>
-        <RollText>{styleFormula(formula)}</RollText>
-        <RollText>{displayFormulaDetails(formulaDetails)}</RollText>
-      </Column>
-      <RollResultContainer index={index}>
-        <RollResultText adjustsFontSizeToFit>{result}</RollResultText>
-      </RollResultContainer>
-    </RollContainer>
+    <Pressable onPress={() => {}} onLongPress={onLongPress}>
+      {({ pressed }) => (
+        <RollContainer pressed={pressed} index={index}>
+          <Column>
+            <RollText>{styleFormula(formula)}</RollText>
+            <RollText>{displayFormulaDetails(formulaDetails)}</RollText>
+          </Column>
+          <RollResultContainer index={index}>
+            <RollResultText adjustsFontSizeToFit>{result}</RollResultText>
+          </RollResultContainer>
+        </RollContainer>
+      )}
+    </Pressable>
   );
 };
 
-const CalculatorHistory = ({ setFormula }) => {
+const CalculatorHistory = ({ history }) => {
   return (
     <>
       {/* TODO: Need to add scroll to bottom on size change */}
       <Container
         inverted
-        data={testData}
+        data={history}
         contentContainerStyle={{ paddingBottom: 40 }}
         renderItem={({ item }) => (
           <Roll

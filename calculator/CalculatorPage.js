@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
 import styled from 'styled-components/native';
@@ -25,11 +25,13 @@ const Content = styled.View`
 `;
 
 const CalculatorPage = () => {
-  const [formula, setFormula, { push, pop, roll, clear }] = useDiceCalculator();
+  const [rollHistory, setRollHistory] = useState([]);
+  const [formula, setFormula, { push, pop, roll, clear }] =
+    useDiceCalculator(setRollHistory);
   return (
     <Container>
       <Content>
-        <CalculatorHistory setFormula={setFormula} />
+        <CalculatorHistory history={rollHistory} />
         <CalculatorOutput formula={formula} />
         <CalculatorButtons push={push} pop={pop} roll={roll} clear={clear} />
       </Content>

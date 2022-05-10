@@ -21,7 +21,6 @@ const ScrollContainer = styled.ScrollView`
 
 const Formula = styled.Text`
   font-size: 50px;
-  font-family: 'Neucha';
   color: #fff;
   padding: 5px 30px 0px 0px;
 `;

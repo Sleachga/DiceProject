@@ -5,9 +5,7 @@ import toastConfig from './Toast';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
-import AppLoading from 'expo-app-loading';
-import { useFonts } from 'expo-font';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
 
 import CalculatorPage from './calculator/CalculatorPage';
@@ -45,14 +43,6 @@ const RollsScreen = () => {
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  let [fontsLoaded] = useFonts({
-    Neucha: require('./assets/fonts/Neucha-Regular.ttf'),
-  });
-
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
-
   return (
     <>
       <NavigationContainer>

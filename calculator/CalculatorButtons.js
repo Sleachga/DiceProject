@@ -35,7 +35,6 @@ const Button = styled.View`
 
 const ButtonText = styled.Text`
   font-size: 30px;
-  font-family: 'Neucha';
   color: #fff;
 `;
 

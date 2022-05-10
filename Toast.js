@@ -13,9 +13,10 @@ const ToastText = styled.Text`
 `;
 
 const toastConfig = {
-  rollToast: ({ text1, props }) => (
+  rollToast: ({ text1, text2, props }) => (
     <Container>
       <ToastText>{text1}</ToastText>
+      <ToastText>{text2}</ToastText>
       <ToastText>{props.uuid}</ToastText>
     </Container>
   ),
