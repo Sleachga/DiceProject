@@ -26,8 +26,10 @@ const Content = styled.View`
 
 const CalculatorPage = () => {
   const [rollHistory, setRollHistory] = useState([]);
-  const [formula, setFormula, { push, pop, roll, clear }] =
-    useDiceCalculator(setRollHistory);
+  const [formula, setFormula, { push, pop, roll, clear }] = useDiceCalculator(
+    rollHistory,
+    setRollHistory
+  );
   return (
     <Container>
       <Content>

@@ -5,7 +5,7 @@ import { styleFormula } from './CalculatorOutput';
 
 import Toast from 'react-native-toast-message';
 
-const useDiceCalculator = (setRollHistory) => {
+const useDiceCalculator = (rollHistory, setRollHistory) => {
   const [formula, setFormula] = useState([]);
 
   const push = (item) => setFormula([...formula, item]);
@@ -23,7 +23,12 @@ const useDiceCalculator = (setRollHistory) => {
   return [
     formula,
     setFormula,
-    { push: pushIfValid, pop, clear, roll: () => roll(formula) },
+    {
+      push: pushIfValid,
+      pop,
+      clear,
+      roll: () => roll(formula, rollHistory, setRollHistory),
+    },
   ];
 };
 
@@ -104,12 +109,24 @@ const rollDice = (formula) => {
     }
   });
 
-  resultsArr = flatten(resultsArr);
+  let operators = [];
+  formula.forEach((item) => {
+    if (['+', '-'].includes(item)) operators.push(item);
+  });
 
-  return { result, resultsArr, error };
+  formulaDetails = resultsArr.map((roll, index) => {
+    let addition;
+    if (index === 0) addition = true;
+    else addition = operators.shift() === '+';
+
+    if (typeof roll === 'number') return { addition, number: roll };
+    else return { addition, results: roll };
+  });
+
+  return { result, formulaDetails, error };
 };
 
-const roll = (formula) => {
+const roll = (formula, rollHistory, setRollHistory) => {
   if (formula.length < 3) {
     Toast.show({
       autoHide: true,
@@ -129,7 +146,7 @@ const roll = (formula) => {
     return;
   }
 
-  const { result, resultsArr, error } = rollDice(formula);
+  const { result, formulaDetails, error } = rollDice(formula);
 
   if (error) {
     Toast.show({
@@ -141,12 +158,22 @@ const roll = (formula) => {
     return;
   }
 
+  setRollHistory([
+    {
+      formula,
+      result,
+      formulaDetails,
+      index: rollHistory.length,
+    },
+    ...rollHistory,
+  ]);
+
   Toast.show({
     autoHide: true,
     visibilityTime: 3000,
     type: 'rollToast',
     text1: styleFormula(formula),
-    text2: JSON.stringify({ result, resultsArr }),
+    text2: JSON.stringify({ result, formulaDetails }),
   });
   console.log('Rolled!');
 };
