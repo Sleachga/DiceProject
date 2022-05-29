@@ -167,15 +167,6 @@ const roll = (formula, rollHistory, setRollHistory) => {
     },
     ...rollHistory,
   ]);
-
-  Toast.show({
-    autoHide: true,
-    visibilityTime: 3000,
-    type: 'rollToast',
-    text1: styleFormula(formula),
-    text2: JSON.stringify({ result, formulaDetails }),
-  });
-  console.log('Rolled!');
 };
 
 export default useDiceCalculator;
