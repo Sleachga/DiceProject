@@ -70,7 +70,7 @@ const displayFormulaDetails = (formulaDetails) => {
   let string = '';
 
   formulaDetails.forEach((item) => {
-    if (item.results.length > 15)
+    if (item.results && item.results.length > 15)
       item.results = `${item.results.length} rolls...`;
   });
 

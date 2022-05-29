@@ -57,7 +57,7 @@ const calculateSingleRoll = (arr) => {
   const diceType = parseInt(slice(arr, dIndex + 1).join(''));
 
   if (numDice > 100) throw Error("Can't roll more than 100 dice at a time...");
-  if (diceType > 100) throw Error('Maximum dice type is d100');
+  if (diceType > 100) throw Error('Maximum dice type is a D100');
 
   let resultsArr = [];
   for (let i = 0; i < numDice; i++) {
