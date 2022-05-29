@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { last, slice, findIndex, flatten } from 'lodash';
+import { last, slice, findIndex, flatten, countBy } from 'lodash';
 
 import { styleFormula } from './CalculatorOutput';
 
@@ -29,7 +29,20 @@ const useDiceCalculator = (setRollHistory) => {
 
 const isValid = (button, formula) => {
   if (formula.length === 0) return Number.isInteger(button);
+
+  // Makes sure you can't do 1d6d etc...
+  if (formula.includes('D') && button === 'D') {
+    let operatorCount = 0;
+    let dCount = 0;
+    formula.forEach((item) => {
+      if (['+', '-'].includes(item)) operatorCount++;
+      if (item === 'D') dCount++;
+    });
+    if (operatorCount < dCount) return false;
+  }
+
   if (['+', '-', 'D'].includes(last(formula))) return Number.isInteger(button);
+
   return true;
 };
 
@@ -37,6 +50,9 @@ const calculateSingleRoll = (arr) => {
   const dIndex = findIndex(arr, (button) => button === 'D');
   const numDice = parseInt(slice(arr, 0, dIndex).join(''));
   const diceType = parseInt(slice(arr, dIndex + 1).join(''));
+
+  if (numDice > 100) throw Error("Can't roll more than 100 dice at a time...");
+  if (diceType > 100) throw Error('Maximum dice type is d100');
 
   let resultsArr = [];
   for (let i = 0; i < numDice; i++) {
@@ -65,6 +81,7 @@ const rollDice = (formula) => {
   let result = 0;
   let add = true;
   let resultsArr = [];
+  let error = false;
 
   groupedArray.forEach((arr) => {
     if (arr.length === 1 && arr[0] === '+') add = true;
@@ -75,20 +92,21 @@ const rollDice = (formula) => {
     } else if (arr.length === 1) {
       result -= arr[0];
       resultsArr.push(arr[0]);
-    } else if (add) {
-      const rollArr = calculateSingleRoll(arr);
-      result += rollArr.reduce((sum, roll) => roll + sum, 0);
-      resultsArr.push(rollArr);
     } else {
-      const rollArr = calculateSingleRoll(arr);
-      result -= rollArr.reduce((sum, roll) => roll + sum, 0);
-      resultsArr.push(rollArr);
+      try {
+        const rollArr = calculateSingleRoll(arr);
+        if (add) result += rollArr.reduce((sum, roll) => roll + sum, 0);
+        else result -= rollArr.reduce((sum, roll) => roll + sum, 0);
+        resultsArr.push(rollArr);
+      } catch (e) {
+        error = e;
+      }
     }
   });
 
   resultsArr = flatten(resultsArr);
 
-  return { result, resultsArr };
+  return { result, resultsArr, error };
 };
 
 const roll = (formula) => {
@@ -111,8 +129,17 @@ const roll = (formula) => {
     return;
   }
 
-  const { result, resultsArr } = rollDice(formula);
-  if (!result) return;
+  const { result, resultsArr, error } = rollDice(formula);
+
+  if (error) {
+    Toast.show({
+      autoHide: true,
+      visibilityTime: 3000,
+      type: 'rollToast',
+      text1: error.toString(),
+    });
+    return;
+  }
 
   Toast.show({
     autoHide: true,
