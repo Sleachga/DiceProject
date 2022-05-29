@@ -69,20 +69,17 @@ const GradientView = styled.View`
 const displayFormulaDetails = (formulaDetails) => {
   let string = '';
 
-  formulaDetails.forEach((item) => {
-    if (item.results && item.results.length > 15)
-      item.results = `${item.results.length} rolls...`;
-  });
-
   formulaDetails.forEach((part, i) => {
-    if (typeof part.results === 'String') string += part.results;
+    if (i !== 0) string += `${part.addition ? ' + ' : ' - '}`;
 
-    if (i !== 0) {
-      string += `${part.addition ? ' + ' : ' - '}`;
-    }
-
-    if (part.results) string += `${JSON.stringify(part.results)}`;
     if (part.number) string += `${part.number}`;
+    else if (
+      part.results &&
+      typeof part.results === 'object' &&
+      part.results.length > 15
+    ) {
+      string += `[${part.results.slice(0, 5).join()}, ... ]`;
+    } else if (part.results) string += `${JSON.stringify(part.results)}`;
   });
 
   return string;
@@ -100,13 +97,18 @@ const Roll = ({ formula, formulaDetails, result, index }) => {
     });
   };
 
+  const styledFormula = styleFormula(formula);
+  const styledFormulaDetails = displayFormulaDetails(formulaDetails);
+
   return (
     <Pressable onPress={() => {}} onLongPress={onLongPress}>
       {({ pressed }) => (
         <RollContainer pressed={pressed} index={index}>
           <Column>
-            <RollText>{styleFormula(formula)}</RollText>
-            <RollText>{displayFormulaDetails(formulaDetails)}</RollText>
+            <RollText>{styledFormula}</RollText>
+            {styledFormula !== styledFormulaDetails && (
+              <RollText>{styledFormulaDetails}</RollText>
+            )}
           </Column>
           <RollResultContainer index={index}>
             <RollResultText adjustsFontSizeToFit>{result}</RollResultText>

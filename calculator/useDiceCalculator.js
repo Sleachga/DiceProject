@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { last, slice, findIndex, flatten, countBy } from 'lodash';
-
-import { styleFormula } from './CalculatorOutput';
+import { last, slice, findIndex } from 'lodash';
 
 import Toast from 'react-native-toast-message';
 
@@ -91,12 +89,11 @@ const rollDice = (formula) => {
   groupedArray.forEach((arr) => {
     if (arr.length === 1 && arr[0] === '+') add = true;
     else if (arr.length === 1 && arr[0] === '-') add = false;
-    else if (add && arr.length === 1) {
-      result += arr[0];
-      resultsArr.push(arr[0]);
-    } else if (arr.length === 1) {
-      result -= arr[0];
-      resultsArr.push(arr[0]);
+    else if (!arr.includes('D')) {
+      const number = parseInt(arr.join(''));
+      if (add) result += number;
+      else result -= number;
+      resultsArr.push(number);
     } else {
       try {
         const rollArr = calculateSingleRoll(arr);
@@ -126,7 +123,7 @@ const rollDice = (formula) => {
   return { result, formulaDetails, error };
 };
 
-const roll = (formula, rollHistory, setRollHistory) => {
+const roll = (clear, formula, rollHistory, setRollHistory) => {
   if (formula.length < 3) {
     Toast.show({
       autoHide: true,
