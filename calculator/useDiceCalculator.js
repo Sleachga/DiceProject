@@ -111,7 +111,7 @@ const rollDice = (formula) => {
     if (['+', '-'].includes(item)) operators.push(item);
   });
 
-  formulaDetails = resultsArr.map((roll, index) => {
+  const formulaDetails = resultsArr.map((roll, index) => {
     let addition;
     if (index === 0) addition = true;
     else addition = operators.shift() === '+';
@@ -123,7 +123,7 @@ const rollDice = (formula) => {
   return { result, formulaDetails, error };
 };
 
-const roll = (clear, formula, rollHistory, setRollHistory) => {
+const roll = (formula, rollHistory, setRollHistory) => {
   if (formula.length < 3) {
     Toast.show({
       autoHide: true,
