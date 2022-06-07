@@ -124,16 +124,7 @@ const rollDice = (formula) => {
 };
 
 const roll = (formula, rollHistory, setRollHistory) => {
-  if (formula.length < 3) {
-    Toast.show({
-      autoHide: true,
-      visibilityTime: 500,
-      type: 'rollToast',
-      text1: 'Not valid...',
-    });
-    return;
-  }
-  if (['+', '-'].includes(last(formula))) {
+  if (formula.length < 3 || ['+', '-', 'D'].includes(last(formula))) {
     Toast.show({
       autoHide: true,
       visibilityTime: 500,
