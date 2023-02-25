@@ -32,7 +32,7 @@ export default function App() {
               if (route.name === 'Calculator') {
                 iconName = focused ? 'calculator' : 'calculator-outline';
               } else if (route.name === 'Rolls') {
-                iconName = focused ? 'md-star' : 'md-star-outline';
+                iconName = focused ? 'bookmark' : 'bookmark-outline';
               } else if (route.name === 'Settings') {
                 iconName = focused ? 'settings' : 'settings-outline';
               } else if (route.name === 'Social') {
@@ -67,24 +67,22 @@ export default function App() {
             headerShown: false,
           })}
         >
-          <Tab.Screen
-            name='Calculator'
-            component={() => (
+          <Tab.Screen name='Calculator'>
+            {() => (
               <CalculatorPage
                 rollHistory={rollHistory}
                 setRollHistory={setRollHistory}
               />
             )}
-          />
-          <Tab.Screen
-            name='Dice'
-            component={() => (
+          </Tab.Screen>
+          <Tab.Screen name='Dice'>
+            {() => (
               <DiceScreen
                 rollHistory={rollHistory}
                 setRollHistory={setRollHistory}
               />
             )}
-          />
+          </Tab.Screen>
           <Tab.Screen name='Rolls' component={RollsScreen} />
           <Tab.Screen name='Social' component={SocialScreen} />
           <Tab.Screen name='Settings' component={SettingsScreen} />
