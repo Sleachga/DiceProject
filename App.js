@@ -1,48 +1,26 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { useState } from 'react';
 
 import toastConfig from './Toast';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from '@expo/vector-icons/Ionicons';
+
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+
 import Toast from 'react-native-toast-message';
 
 import CalculatorPage from './calculator/CalculatorPage';
 
-const SettingsScreen = () => {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#2a2d35',
-      }}
-    >
-      <Text style={{ color: 'white' }}>Settings!</Text>
-    </View>
-  );
-};
-
-const RollsScreen = () => {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#2a2d35',
-      }}
-    >
-      <Text style={{ color: 'white' }}>Rolls!</Text>
-    </View>
-  );
-};
+import SettingsScreen from './screens/SettingsScreen';
+import DiceScreen from './screens/DiceScreen';
+import RollsScreen from './screens/RollsScreen';
+import SocialScreen from './screens/SocialScreen';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const [rollHistory, setRollHistory] = useState([]);
+
   return (
     <>
       <NavigationContainer>
@@ -57,6 +35,17 @@ export default function App() {
                 iconName = focused ? 'md-star' : 'md-star-outline';
               } else if (route.name === 'Settings') {
                 iconName = focused ? 'settings' : 'settings-outline';
+              } else if (route.name === 'Social') {
+                iconName = focused ? 'people-circle' : 'people-circle-outline';
+              } else if (route.name === 'Dice') {
+                iconName = focused ? 'dice-d20' : 'dice-d20-outline';
+                return (
+                  <MaterialCommunityIcons
+                    name={iconName}
+                    size={size}
+                    color='white'
+                  />
+                );
               }
 
               return <Ionicons name={iconName} size={size} color={color} />;
@@ -78,8 +67,26 @@ export default function App() {
             headerShown: false,
           })}
         >
-          <Tab.Screen name='Calculator' component={CalculatorPage} />
+          <Tab.Screen
+            name='Calculator'
+            component={() => (
+              <CalculatorPage
+                rollHistory={rollHistory}
+                setRollHistory={setRollHistory}
+              />
+            )}
+          />
+          <Tab.Screen
+            name='Dice'
+            component={() => (
+              <DiceScreen
+                rollHistory={rollHistory}
+                setRollHistory={setRollHistory}
+              />
+            )}
+          />
           <Tab.Screen name='Rolls' component={RollsScreen} />
+          <Tab.Screen name='Social' component={SocialScreen} />
           <Tab.Screen name='Settings' component={SettingsScreen} />
         </Tab.Navigator>
       </NavigationContainer>

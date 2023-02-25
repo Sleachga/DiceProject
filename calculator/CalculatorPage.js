@@ -24,8 +24,7 @@ const Content = styled.View`
   justify-content: flex-end;
 `;
 
-const CalculatorPage = () => {
-  const [rollHistory, setRollHistory] = useState([]);
+const CalculatorPage = ({ rollHistory, setRollHistory }) => {
   const [formula, setFormula, { push, pop, roll, clear }] = useDiceCalculator(
     rollHistory,
     setRollHistory
