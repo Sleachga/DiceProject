@@ -16,10 +16,20 @@ import DiceScreen from './screens/DiceScreen';
 import RollsScreen from './screens/RollsScreen';
 import SocialScreen from './screens/SocialScreen';
 
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import firebaseConfig from './firebaseConfig';
+
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [rollHistory, setRollHistory] = useState([]);
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  // Initialize Cloud Firestore and get a reference to the service
+  const db = getFirestore(app);
 
   return (
     <>
@@ -84,7 +94,9 @@ export default function App() {
             )}
           </Tab.Screen>
           <Tab.Screen name='Rolls' component={RollsScreen} />
-          <Tab.Screen name='Social' component={SocialScreen} />
+          <Tab.Screen name='Social'>
+            {() => <SocialScreen db={db} />}
+          </Tab.Screen>
           <Tab.Screen name='Settings' component={SettingsScreen} />
         </Tab.Navigator>
       </NavigationContainer>

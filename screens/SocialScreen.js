@@ -1,6 +1,19 @@
+import { useEffect } from 'react';
 import { Text, View } from 'react-native';
+import { collection, getDocs } from 'firebase/firestore';
 
-export default SettingsScreen = () => {
+const SettingsScreen = ({ db }) => {
+  useEffect(() => {
+    const getSharedRolls = async () => {
+      const querySnapshot = await getDocs(collection(db, 'SharedRolls'));
+      querySnapshot.forEach((doc) => {
+        console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+      });
+    };
+
+    getSharedRolls();
+  });
+
   return (
     <View
       style={{
@@ -14,3 +27,5 @@ export default SettingsScreen = () => {
     </View>
   );
 };
+
+export default SettingsScreen;
